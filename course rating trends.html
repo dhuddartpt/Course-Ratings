@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huddart Q5 Course Design Ratings 2022–2025</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2rem; background: #fff; color: #1a1a1a; }
+  h1 { font-size: 18px; font-weight: 500; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 13px; color: #555; margin-bottom: 1.5rem; border-left: 3px solid #ccc; padding-left: 0.75rem; }
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .card { background: #f5f5f3; border-radius: 8px; padding: 1rem; text-align: center; }
+  .card-label { font-size: 13px; color: #666; margin-bottom: 4px; }
+  .card-value { font-size: 22px; font-weight: 500; }
+  .card-sub { font-size: 11px; color: #888; }
+  .legend { display: flex; gap: 16px; margin-bottom: 8px; font-size: 12px; color: #555; flex-wrap: wrap; }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .line-swatch { width: 10px; height: 3px; display: inline-block; }
+  .chart-container { position: relative; width: 100%; height: 340px; }
+  .section-title { font-size: 13px; color: #555; margin: 1.5rem 0 0.5rem; border-top: 0.5px solid #ddd; padding-top: 1rem; }
+  .tier-legend { display: flex; gap: 12px; margin-bottom: 8px; font-size: 11px; flex-wrap: wrap; }
+  .bar-container { position: relative; width: 100%; height: 620px; }
+</style>
+</head>
+<body>
+
+<h1>Huddart — Q5 Course Design Ratings 2022–2025</h1>
+<p class="subtitle">All ratings use Q5: "In general, this course was well-designed to help me learn critical subject matter" (5–1 scale). Only courses where Huddart was primary or co-primary instructor are included in trend and averages. * = co-primary. † = low response rate (n=6).</p>
+
+<div class="cards">
+  <div class="card"><div class="card-label">Avg Q5 (primary)</div><div class="card-value">3.97</div><div class="card-sub">11 courses</div></div>
+  <div class="card"><div class="card-label">2022–2023 avg</div><div class="card-value">4.06</div><div class="card-sub">primary only</div></div>
+  <div class="card"><div class="card-label">2024–2025 avg</div><div class="card-value">3.84</div><div class="card-sub">primary only</div></div>
+  <div class="card"><div class="card-label">Courses ≥ 4.0</div><div class="card-value">7 / 11</div><div class="card-sub">primary courses</div></div>
+</div>
+
+<div class="legend">
+  <span><span class="line-swatch" style="background:#378ADD;"></span>Q5 — primary instructor</span>
+  <span><span class="line-swatch" style="background:#E24B4A;border-style:dashed;"></span>Trend line</span>
+  <span><span class="swatch" style="background:#D85A30;"></span>Fall 2025 (new)</span>
+  <span><span class="swatch" style="background:#888780;opacity:0.5;"></span>Adjunct/lab (excluded)</span>
+  <span><span class="line-swatch" style="background:#aaa;"></span>Midpoint (3.5)</span>
+</div>
+
+<div class="chart-container">
+  <canvas id="lineChart" role="img" aria-label="Line chart of Q5 ratings for primary instructor courses from Summer 2022 to Fall 2025."></canvas>
+</div>
+
+<div class="section-title">All courses — grey bars excluded from trend and averages</div>
+<div class="tier-legend">
+  <span><span class="swatch" style="background:#1D9E75;"></span>≥ 4.5 excellent</span>
+  <span><span class="swatch" style="background:#378ADD;"></span>4.0–4.49 good</span>
+  <span><span class="swatch" style="background:#BA7517;"></span>3.5–3.99 adequate</span>
+  <span><span class="swatch" style="background:#E24B4A;"></span>&lt; 3.5 needs attention</span>
+  <span><span class="swatch" style="background:#888780;opacity:0.5;"></span>adjunct/lab (context only)</span>
+  <span><span class="swatch" style="background:#D85A30;"></span>Fall 2025 new</span>
+</div>
+<div class="bar-container">
+  <canvas id="barChart" role="img" aria-label="Horizontal bar chart of Q5 scores for all courses."></canvas>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const all = [
+  { label: 'Medical Terminology 704 – Sum 22',      q5: 4.45, primary: true,  isNew: false, note: '' },
+  { label: 'Prof Competencies I 746 – Sum 22',      q5: 4.05, primary: true,  isNew: false, note: '' },
+  { label: 'Integrative Health 840 – Sum 22 †',     q5: 4.67, primary: true,  isNew: false, note: '† low response rate (n=6)' },
+  { label: 'Basic Eval Skills 802* – Fall 22',      q5: 4.73, primary: false, isNew: false, note: '* adjunct' },
+  { label: 'Cardiopulm 814* – Fall 22',             q5: 4.14, primary: false, isNew: false, note: '* adjunct' },
+  { label: 'Acute Care Mgmt 812* – Spr 23',         q5: 2.69, primary: false, isNew: false, note: '* adjunct' },
+  { label: 'Comp Exam 899* – Spr 23',               q5: 2.77, primary: true,  isNew: false, note: '* co-primary' },
+  { label: 'Neuro Conditions 824* – Sum 23',        q5: 2.75, primary: false, isNew: false, note: '* adjunct' },
+  { label: 'Prof Competencies I 746 – Sum 23',      q5: 4.35, primary: true,  isNew: false, note: '' },
+  { label: 'Pharmacology 752* – Fall 23',           q5: 4.63, primary: false, isNew: false, note: '* adjunct' },
+  { label: 'Basic Eval Skills 802* – Fall 23',      q5: 3.96, primary: false, isNew: false, note: '* lab instructor' },
+  { label: 'Integrative Health 840 – Spr 24',       q5: 4.14, primary: true,  isNew: false, note: '' },
+  { label: 'Phys Modalities 733* – Spr 24',         q5: 4.64, primary: false, isNew: false, note: '* adjunct' },
+  { label: 'Prof Competencies 746 – Fall 24',       q5: 4.22, primary: true,  isNew: false, note: '' },
+  { label: 'Basic Eval Skills 802 – Fall 24',       q5: 3.48, primary: true,  isNew: false, note: '' },
+  { label: 'Science of Pain 754 – Spr 25',          q5: 3.10, primary: true,  isNew: false, note: '' },
+  { label: 'Prof Competencies II 746 – Fall 25',    q5: 4.40, primary: true,  isNew: true,  note: '' },
+  { label: 'Foundational Skills 802 – Fall 25',     q5: 4.00, primary: true,  isNew: true,  note: '' },
+];
+
+const primary = all.filter(c => c.primary);
+
+function trendLine(data) {
+  const n = data.length;
+  const xMean = (n - 1) / 2;
+  const yMean = data.reduce((a, b) => a + b, 0) / n;
+  let num = 0, den = 0;
+  data.forEach((y, x) => { num += (x - xMean) * (y - yMean); den += (x - xMean) ** 2; });
+  const slope = num / den, intercept = yMean - slope * xMean;
+  return data.map((_, x) => +(intercept + slope * x).toFixed(3));
+}
+
+const primaryQ5 = primary.map(c => c.q5);
+const trend = trendLine(primaryQ5);
+const primaryLabels = primary.map(c => c.label.replace(' – ', '\n'));
+
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: {
+    labels: primaryLabels,
+    datasets: [
+      {
+        label: 'Q5 primary',
+        data: primaryQ5,
+        borderColor: '#378ADD',
+        tension: 0.3,
+        pointRadius: primary.map(c => c.isNew ? 8 : 5),
+        pointHoverRadius: 9,
+        pointBackgroundColor: primary.map(c => c.isNew ? '#D85A30' : '#378ADD'),
+        pointBorderColor: primary.map(c => c.isNew ? '#fff' : '#378ADD'),
+        pointBorderWidth: primary.map(c => c.isNew ? 2 : 0),
+        fill: false,
+        order: 1,
+      },
+      {
+        label: 'Trend',
+        data: trend,
+        borderColor: 'rgba(226,75,74,0.5)',
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+        order: 2,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        filter: i => i.datasetIndex === 0,
+        callbacks: {
+          title: i => primary[i[0].dataIndex].label,
+          label: i => {
+            const c = primary[i[0].dataIndex];
+            return [` Q5: ${i.raw.toFixed(2)}`, c.note ? ` ${c.note}` : ''].filter(Boolean);
+          }
+        }
+      }
+    },
+    scales: {
+      y: { min: 2, max: 5, ticks: { stepSize: 0.5, callback: v => v.toFixed(1) }, grid: { color: 'rgba(128,128,128,0.1)' } },
+      x: { ticks: { font: { size: 9 }, maxRotation: 50, autoSkip: false } }
+    }
+  },
+  plugins: [{
+    id: 'midline',
+    afterDraw(chart) {
+      const { ctx, scales: { y, x } } = chart;
+      const yPos = y.getPixelForValue(3.5);
+      ctx.save(); ctx.setLineDash([6,4]); ctx.strokeStyle = 'rgba(136,135,128,0.4)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x.left, yPos); ctx.lineTo(x.right, yPos); ctx.stroke(); ctx.restore();
+    }
+  }]
+});
+
+const barColors = all.map(c => {
+  if (!c.primary) return 'rgba(136,135,128,0.35)';
+  if (c.isNew) return '#D85A30';
+  if (c.q5 >= 4.5) return '#1D9E75';
+  if (c.q5 >= 4.0) return '#378ADD';
+  if (c.q5 >= 3.5) return '#BA7517';
+  return '#E24B4A';
+});
+
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: all.map(c => c.label),
+    datasets: [{
+      label: 'Q5',
+      data: all.map(c => c.q5),
+      backgroundColor: barColors,
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: i => all[i[0].dataIndex].label,
+          label: i => {
+            const c = all[i[0].dataIndex];
+            const role = !c.primary ? '  (excluded — adjunct/lab)' : c.note ? `  (${c.note})` : '';
+            return ` Q5: ${i.raw.toFixed(2)}${role}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { min: 1, max: 5, ticks: { stepSize: 0.5, callback: v => v.toFixed(1) }, grid: { color: 'rgba(128,128,128,0.1)' } },
+      y: { ticks: { font: { size: 10 } } }
+    }
+  },
+  plugins: [{
+    id: 'midlinebar',
+    afterDraw(chart) {
+      const { ctx, scales: { x, y } } = chart;
+      const xPos = x.getPixelForValue(3.5);
+      ctx.save(); ctx.setLineDash([6,4]); ctx.strokeStyle = 'rgba(136,135,128,0.4)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(xPos, y.top); ctx.lineTo(xPos, y.bottom); ctx.stroke(); ctx.restore();
+    }
+  }]
+});
+</script>
+</body>
+</html>
